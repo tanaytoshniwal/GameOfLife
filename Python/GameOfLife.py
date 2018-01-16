@@ -74,7 +74,7 @@ def next(grid, new_grid):
 
 def init(grid):
     done = False
-    prompt = 'CONFIG %d: Type coordinates to toggle (or start to finish) %s: '
+    prompt = 'CONFIG %d: Type coordinates to toggle (or start) %s: '
     config_step = 0
     last_coord = ''
     while True:
