@@ -16,7 +16,7 @@ class bcolors:
         self.FAIL = ''
         self.ENDC = ''
 
-def get_term_size():
+def get():
     import os
     env = os.environ
     def ioctl_GWINSZ(fd):
@@ -44,7 +44,7 @@ def clear_terminal():
     import sys
     sys.stdout.write( chr(27) + "[2J" )
 
-def update_screen(grid):
+def update(grid):
     clear_terminal()
     print bcolors.RED + ' GAME OF LIFE' + bcolors.ENDC
     print bcolors.YELLOW + '-'*( len(grid[0]) + 5) + bcolors.ENDC
@@ -59,10 +59,10 @@ def update_screen(grid):
         print
     print bcolors.YELLOW + '-' * ( len(grid[0]) + 5 ) + bcolors.ENDC
 
-def next_step(grid, new_grid):
+def next(grid, new_grid):
     for x in range(0, len(grid[0])):
         for y in range(0, len(grid)):
-            live_neighbors = healthy_neighbors(x, y, grid)
+            live_neighbors = neighbors(x, y, grid)
             if grid[y][x]:
                 if live_neighbors < 2 or live_neighbors > 3:
                     new_grid[y][x] = 0
@@ -72,7 +72,7 @@ def next_step(grid, new_grid):
                 if live_neighbors == 3:
                     new_grid[y][x] = 1
 
-def read_initial_conf(grid):
+def init(grid):
     done = False
     prompt = 'CONFIG %d: Type coordinates to toggle (or start to finish) %s: '
     config_step = 0
@@ -97,9 +97,9 @@ def read_initial_conf(grid):
         if done:
             break
         grid [coord[1]][coord[0]] = (grid[coord[1]][coord[0]] + 1) % 2
-        update_screen(grid)
+        update(grid)
 
-def healthy_neighbors(x, y, grid):
+def neighbors(x, y, grid):
 	live_neighbors = 0
 	for i in range(-1, 2):
 		testx = (x+i) % len(grid[0])
@@ -112,13 +112,13 @@ def healthy_neighbors(x, y, grid):
 	return live_neighbors
 
 if __name__ == "__main__":
-	(width, height) = get_term_size()
+	(width, height) = get()
 	grid = [(width-5)*[0] for i in range(height-5)]
-	update_screen(grid)
-	read_initial_conf(grid)
+	update(grid)
+	init(grid)
 	prompt = ('ITER %d: Type anything to continue, the number of steps to ' + 'perform (or quit to exit): ')
 	iter_step = 1
-	update_screen(grid)
+	update(grid)
 	while True:
 		play = raw_input('%s' % (prompt % iter_step))
 		if play == 'quit':
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 			pass
 		for i in range(batch_steps):
 			new_grid = [len(grid[0])*[0] for i in range(len(grid))]
-			next_step(grid, new_grid)
+			next(grid, new_grid)
 			grid, new_grid = new_grid, grid
-			update_screen(grid)
+			update(grid)
 		iter_step += batch_steps
