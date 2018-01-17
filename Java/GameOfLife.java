@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GameOfLife extends JFrame implements ActionListener{
@@ -247,5 +248,6 @@ public class GameOfLife extends JFrame implements ActionListener{
 	public static void main(String[] args){
 		frame=new GameOfLife();
 		frame.setVisible(true);
+		JOptionPane.showMessageDialog(frame, "You can click the grid for custom input", "Hey!", JOptionPane.INFORMATION_MESSAGE);
 	}
 }
