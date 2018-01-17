@@ -3,6 +3,7 @@ My Implementation of __*Conway's Game Of Life*__
 
 ## Screenshots
 Screenshots for Java-GUI
+
 <img src='https://github.com/AlphaBAT69/GameOfLife/blob/master/gifs/java.gif' width='700px'>
 
 ### Java-GUI
