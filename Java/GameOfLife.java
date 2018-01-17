@@ -42,7 +42,8 @@ public class GameOfLife extends JFrame implements ActionListener{
 				cell[i][j].setBackground(Color.WHITE);
 				cell[i][j].setVisible(true);
 				cell[i][j].setBorder(null);
-				cell[i][j].setEnabled(false);
+				//cell[i][j].setEnabled(false);
+				cell[i][j].addActionListener(this);
 				pan.add(cell[i][j]);
 				if(i==0||j==0||i==68||j==68)
 					cell[i][j].setBackground(Color.RED);
@@ -64,6 +65,16 @@ public class GameOfLife extends JFrame implements ActionListener{
 		add(btn, BorderLayout.SOUTH);
 		add(pan);
 	}
+	int[] get(JButton b) {
+		int arr[]=new int[2];
+		for(int i=0;i<69;i++)
+			for(int j=0;j<69;j++)
+				if(b==cell[i][j]) {
+					arr[0]=i;
+					arr[1]=j;
+				}
+		return arr;
+	}
 	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -74,7 +85,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 			start.setEnabled(false);
 			stop.setEnabled(true);
 		}
-		if(b==stop) {
+		else if(b==stop) {
 			try {
 				thread.stop();
 			}
@@ -84,10 +95,21 @@ public class GameOfLife extends JFrame implements ActionListener{
 			stop.setEnabled(false);
 			reset.setEnabled(true);
 		}
-		if(b==reset) {
+		else if(b==reset) {
 			reset.setEnabled(false);
 			start.setEnabled(true);
 			set();
+		}
+		else {
+			int[] a = get(b);
+			if(b.getBackground()==Color.BLACK) {
+				b.setBackground(Color.WHITE);
+				grid[a[0]][a[1]] = 0;
+			}
+			else {
+				b.setBackground(Color.BLACK);
+				grid[a[0]][a[1]] = 1;
+			}
 		}
 	}
 	void set() {
@@ -136,8 +158,6 @@ public class GameOfLife extends JFrame implements ActionListener{
 		cell[4][37].setBackground(Color.BLACK);
 		cell[5][36].setBackground(Color.BLACK);
 		cell[5][37].setBackground(Color.BLACK);
-		
-
 		grid[6][2]=1;
 		grid[6][3]=1;
 		grid[7][2]=1;
