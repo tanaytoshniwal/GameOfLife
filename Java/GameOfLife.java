@@ -59,12 +59,17 @@ public class GameOfLife extends JFrame implements ActionListener{
 		stop.setEnabled(false);
 		reset.setEnabled(false);
 		set();
-		System.out.println(this.getLayout());
+		//System.out.println(this.getLayout());
 		btn.add(start);
 		btn.add(stop);
 		btn.add(reset);
 		add(btn, BorderLayout.SOUTH);
 		add(pan);
+	}
+	void set(boolean b) {
+		for(int i=0;i<69;i++)
+			for(int j=0;j<69;j++)
+				cell[i][j].setEnabled(b);
 	}
 	int[] get(JButton b) {
 		int arr[]=new int[2];
@@ -85,6 +90,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 			thread.start();
 			start.setEnabled(false);
 			stop.setEnabled(true);
+			set(false);
 		}
 		else if(b==stop) {
 			try {
@@ -93,6 +99,8 @@ public class GameOfLife extends JFrame implements ActionListener{
 			catch(Exception ee) {
 				
 			}
+			set(true);
+			start.setEnabled(true);
 			stop.setEnabled(false);
 			reset.setEnabled(true);
 		}
@@ -226,7 +234,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 				if(neighbours==3)
 					grid[i][j]=1;
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		update();
 		//System.exit(0);
