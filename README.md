@@ -23,4 +23,4 @@ Just clone this repository and navigate to _Python_ folder and type the followin
 Now input The starting coordinates of population and start the iteration.
 Input the no of generation to skip those generations.
 
-<> with &hearts; by Tanay Toshniwal&copy;
+<p align="center"><> with &hearts; by Tanay Toshniwal&copy;</p>
