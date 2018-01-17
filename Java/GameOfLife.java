@@ -1,5 +1,12 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,18 +14,26 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class GameOfLife extends JFrame{
+public class GameOfLife extends JFrame implements ActionListener{
 	static JButton cell[][] = new JButton[69][69];
 	JButton start,stop,reset;
 	static int grid[][] = new int[69][69];
-	static JPanel pan;
+	static JPanel pan,btn;
 	static GameOfLife frame = null;
+	static Update thread = null;
 	static boolean b = true;
 	public GameOfLife() {
 		super("Game Of Life");
 		setSize(500, 500);
 		setLocationRelativeTo(this);
 		setResizable(false);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
+		btn = new JPanel(new FlowLayout());
 		pan = new JPanel(new GridLayout(69,69));
 		for(int i=0;i<69;i++) {
 			for(int j=0;j<69;j++) {
@@ -26,7 +41,7 @@ public class GameOfLife extends JFrame{
 				cell[i][j] = new JButton();
 				cell[i][j].setBackground(Color.WHITE);
 				cell[i][j].setVisible(true);
-				//cell[i][j].setBorder(null);
+				cell[i][j].setBorder(null);
 				cell[i][j].setEnabled(false);
 				pan.add(cell[i][j]);
 				if(i==0||j==0||i==68||j==68)
@@ -35,11 +50,56 @@ public class GameOfLife extends JFrame{
 		}
 		start=new JButton("START");
 		stop=new JButton("STOP");
-		reset=new JButton("reset");
+		reset=new JButton("RESET");
+		start.addActionListener(this);
+		stop.addActionListener(this);
+		reset.addActionListener(this);
+		stop.setEnabled(false);
+		reset.setEnabled(false);
 		set();
+		System.out.println(this.getLayout());
+		btn.add(start);
+		btn.add(stop);
+		btn.add(reset);
+		add(btn, BorderLayout.SOUTH);
 		add(pan);
 	}
+	@SuppressWarnings("deprecation")
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton b=(JButton)e.getSource();
+		if(b==start) {
+			thread = frame.new Update();
+			thread.start();
+			start.setEnabled(false);
+			stop.setEnabled(true);
+		}
+		if(b==stop) {
+			try {
+				thread.stop();
+			}
+			catch(Exception ee) {
+				
+			}
+			stop.setEnabled(false);
+			reset.setEnabled(true);
+		}
+		if(b==reset) {
+			reset.setEnabled(false);
+			start.setEnabled(true);
+			set();
+		}
+	}
 	void set() {
+		for(int i=0;i<69;i++) {
+			for(int j=0;j<69;j++) {
+				if(i==0||j==0||i==68||j==68)
+					cell[i][j].setBackground(Color.RED);
+				else
+					cell[i][j].setBackground(Color.WHITE);
+				grid[i][j]=0;
+			}
+		}
 		cell[6][2].setBackground(Color.BLACK);
 		cell[6][3].setBackground(Color.BLACK);
 		cell[7][2].setBackground(Color.BLACK);
@@ -114,30 +174,6 @@ public class GameOfLife extends JFrame{
 		grid[4][37]=1;
 		grid[5][36]=1;
 		grid[5][37]=1;
-		/*if(i==60 && j==60) {
-			cell[i][j].setBackground(Color.BLACK);
-			grid[i][j]=1;
-		}
-		if(i==60 && j==61) {
-			cell[i][j].setBackground(Color.BLACK);
-			grid[i][j]=1;
-		}
-		if(i==60 && j==62) {
-			cell[i][j].setBackground(Color.BLACK);
-			grid[i][j]=1;
-		}
-		if(i==4 && j==2) {
-			cell[i][j].setBackground(Color.BLACK);
-			grid[i][j]=1;
-		}
-		if(i==2 && j==2) {
-			cell[i][j].setBackground(Color.BLACK);
-			grid[i][j]=1;
-		}
-		if(i==3 && j==2) {
-			cell[i][j].setBackground(Color.BLACK);
-			grid[i][j]=1;
-		}*/
 	}
 	int getN(int x,int y) {
 		int n=0;
@@ -191,6 +227,5 @@ public class GameOfLife extends JFrame{
 	public static void main(String[] args){
 		frame=new GameOfLife();
 		frame.setVisible(true);
-		//frame.new Update().start();
 	}
 }
