@@ -6,6 +6,8 @@ Screenshots for Java-GUI
 
 <img src='https://github.com/AlphaBAT69/GameOfLife/blob/master/gifs/java.gif' width='700px'>
 
+__*Note:*__``` You can also Input your own values by clicking the grid. ```
+
 ### Java-GUI
 Just clone this repository and navigate to _Java_ folder and type the following commands:
 
