@@ -12,17 +12,20 @@ import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GameOfLife extends JFrame implements ActionListener{
 	static JButton cell[][] = new JButton[69][69];
 	JButton start,stop,reset;
+	JLabel gen;
 	static int grid[][] = new int[69][69];
 	static JPanel pan,btn;
 	static GameOfLife frame = null;
 	static Update thread = null;
 	static boolean b = true;
+	static int generation = 1;
 	public GameOfLife() {
 		super("Game Of Life");
 		setSize(500, 500);
@@ -34,6 +37,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 				System.exit(0);
 			}
 		});
+		gen = new JLabel("Generation: ");
 		btn = new JPanel(new FlowLayout());
 		pan = new JPanel(new GridLayout(69,69));
 		for(int i=0;i<69;i++) {
@@ -53,6 +57,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 		start=new JButton("START");
 		stop=new JButton("STOP");
 		reset=new JButton("RESET");
+		gen.setForeground(Color.BLUE);
 		start.addActionListener(this);
 		stop.addActionListener(this);
 		reset.addActionListener(this);
@@ -63,6 +68,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 		btn.add(start);
 		btn.add(stop);
 		btn.add(reset);
+		add(gen, BorderLayout.NORTH);
 		add(btn, BorderLayout.SOUTH);
 		add(pan);
 	}
@@ -107,6 +113,8 @@ public class GameOfLife extends JFrame implements ActionListener{
 		else if(b==reset) {
 			reset.setEnabled(false);
 			start.setEnabled(true);
+			gen.setText("Generation: ");
+			generation = 1;
 			set();
 		}
 		else {
@@ -244,6 +252,7 @@ public class GameOfLife extends JFrame implements ActionListener{
 			while(b) {
 				//b=false;
 				loop();
+				gen.setText("Generation: "+generation++);
 				try {
 					Thread.sleep(69);
 				}
